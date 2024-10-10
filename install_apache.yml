@@ -1,0 +1,81 @@
+---
+
+- hosts: all
+
+  become: true
+
+  tasks:
+
+    - name: Update repository index on Debian/Ubuntu
+
+      apt:
+
+        update_cache: yes
+
+      when: ansible_os_family == "Debian"
+
+
+
+    - name: Update repository index on Fedora
+
+      dnf:
+
+        update_cache: yes
+
+      when: ansible_os_family == "RedHat"
+
+
+
+    - name: Install Apache on Debian/Ubuntu
+
+      apt:
+
+        name: apache2
+
+        state: present
+
+      when: ansible_os_family == "Debian"
+
+
+
+    - name: Install Apache on Fedora
+
+      dnf:
+
+        name: httpd
+
+        state: present
+
+      when: ansible_os_family == "RedHat"
+
+
+
+    - name: Add PHP support for Apache on Debian/Ubuntu
+
+      apt:
+
+        name: libapache2-mod-php
+
+        state: present
+
+      when: ansible_os_family == "Debian"
+
+
+
+    - name: Add PHP support for Apache on Fedora
+
+      dnf:
+
+        name: php
+
+        state: present
+
+      when: ansible_os_family == "RedHat"
+
+
+
+    - name: Ensure Apache is restarted after installing PHP on Debian/Ubuntu
+
+      service:
+
+     
