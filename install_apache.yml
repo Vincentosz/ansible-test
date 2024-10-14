@@ -6,76 +6,40 @@
 
   tasks:
 
-    - name: Update repository index on Debian/Ubuntu
-
-      apt:
-
-        update_cache: yes
-
-      when: ansible_os_family == "Debian"
 
 
+  - name: Install Apache and PHP for Ubuntu servers
 
-    - name: Update repository index on Fedora
+    apt:
 
-      dnf:
+      name:
 
-        update_cache: yes
+        - apache2
 
-      when: ansible_os_family == "RedHat"
+        - libapache2-mod-php
 
+      state: latest
 
+      update_cache: yes
 
-    - name: Install Apache on Debian/Ubuntu
-
-      apt:
-
-        name: apache2
-
-        state: present
-
-      when: ansible_os_family == "Debian"
+    when: ansible_distribution == "Debian"
 
 
 
-    - name: Install Apache on Fedora
+  - name: Install Apache and PHP for Fedora servers
 
-      dnf:
+    dnf:
 
-        name: httpd
+      name:
 
-        state: present
+        - httpd
 
-      when: ansible_os_family == "RedHat"
+        - php
 
+      state: latest
 
+      update_cache: yes
 
-    - name: Add PHP support for Apache on Debian/Ubuntu
-
-      apt:
-
-        name: libapache2-mod-php
-
-        state: present
-
-      when: ansible_os_family == "Debian"
+    when: ansible_distribution == "Fedora"
 
 
-
-    - name: Add PHP support for Apache on Fedora
-
-      dnf:
-
-        name: php
-
-        state: present
-
-      when: ansible_os_family == "RedHat"
-
-
-
-    - name: Ensure Apache is restarted after installing PHP on Debian/Ubuntu
-
-      service:
-
-     
