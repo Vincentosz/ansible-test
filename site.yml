@@ -1,7 +1,5 @@
 ---
 
-
-
 - hosts: all
 
   become: true
@@ -10,7 +8,7 @@
 
 
 
-  - name: Install updates (Fedora)
+  - name: install updates (Fedora)
 
     dnf:
 
@@ -22,7 +20,7 @@
 
 
 
-  - name: Install updates (Debian)
+  - name: install updates (Debian)
 
     apt:
 
@@ -34,8 +32,6 @@
 
 
 
-
-
 - hosts: web_servers
 
   become: true
@@ -44,15 +40,11 @@
 
 
 
-  - name: Install httpd and php packages (Fedora)
+  - name: Install Git
 
     dnf:
 
-      name:
-
-        - httpd
-
-        - php
+      name: git
 
       state: latest
 
@@ -60,15 +52,11 @@
 
 
 
-  - name: Install apache2 and php packages (Debian)
+  - name: Install Git (Debian)
 
     apt:
 
-      name:
-
-        - apache2
-
-        - libapache2-mod-php
+      name: git
 
       state: latest
 
@@ -76,33 +64,60 @@
 
 
 
+  - name: Pull the latest changes from the repository (Fedora)
 
+    git:
 
-- hosts: db_servers
+      repo: 'https://github.com/Vincentosz/ansible-test.git'  # Correct HTTPS URL
 
-  become: true
+      dest: /var/www/html
 
-  tasks:
+      version: main
 
-
-
-  - name: Install MariaDB (Fedora)
-
-    dnf:
-
-      name: mariadb
-
-      state: latest
+      update: yes
 
     when: ansible_distribution == "Fedora"
 
 
 
-  - name: Install MariaDB server (Debian)
+  - name: Pull the latest changes from the repository (Debian)
 
+    git:
+
+      repo: 'https://github.com/Vincentosz/ansible-test.git'  # Correct HTTPS URL
+      dest: /var/www/html
+      version: main
+      update: yes
+    when: ansible_distribution == "Debian"
+
+  - name: install httpd package (Fedora)
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+    when: ansible_distribution == "Fedora"
+
+  - name: install apache2 package (Debian)
     apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+    when: ansible_distribution == "Debian"
 
+- hosts: db_servers
+  become: true
+  tasks:
+
+  - name: install mariadb server package (Fedora)
+    dnf:
+      name: mariadb
+      state: latest
+    when: ansible_distribution == "Fedora"
+
+  - name: install mariadb server (Debian)
+    apt:
       name: mariadb-server
-
       state: latest
     when: ansible_distribution == "Debian"
