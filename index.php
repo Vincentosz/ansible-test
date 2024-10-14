@@ -18,10 +18,10 @@
     </header>
     <main>
         <h2>Home</h2>
-        <p>This is a basic PHP website example.</p>
+        <p>2024 Vincent test website Yippee</p>
     </main>
     <footer>
-        <p>&copy; 2024 My Basic PHP Website</p>
+        <p>&copy; 2024 Vincent test website Yippee</p>
     </footer>
 </body>
 </html>
